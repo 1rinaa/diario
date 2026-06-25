@@ -160,10 +160,20 @@ app.post('/api/daily', verificarToken, async (req, res) => {
   const db = getDb();
   
   try {
+    // Cambiado INSERT OR REPLACE por la sintaxis estándar ON CONFLICT de Postgres
     await db.run(
-      `INSERT OR REPLACE INTO daily_journal 
+      `INSERT INTO daily_journal 
        (user_id, date, morning_reflection, achievements, struggles, gratitude, evening_reflection, sleep_hours, energy_level)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+       ON CONFLICT (user_id, date) 
+       DO UPDATE SET 
+         morning_reflection = EXCLUDED.morning_reflection,
+         achievements = EXCLUDED.achievements,
+         struggles = EXCLUDED.struggles,
+         gratitude = EXCLUDED.gratitude,
+         evening_reflection = EXCLUDED.evening_reflection,
+         sleep_hours = EXCLUDED.sleep_hours,
+         energy_level = EXCLUDED.energy_level`,
       [req.userId, date, morning_reflection || '', achievements || '', struggles || '', gratitude || '', evening_reflection || '', sleep_hours || 7, energy_level || 3]
     );
     res.json({ message: 'Diario guardado 💚' });
