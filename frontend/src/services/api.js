@@ -30,11 +30,16 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    // Si el error ocurrió intentando iniciar sesión, NO limpies el almacenamiento ni alteres el flujo
+    if (error.config?.url?.includes('/login')) {
+      return Promise.reject(error);
+    }
+
     if (error.response?.status === 401) {
-      // Token expirado o inválido
+      // Token expirado o inválido en rutas protegidas
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      // Redirigir al login si es necesario
+      
       if (window.location.pathname !== '/login') {
         window.location.href = '/login';
       }
