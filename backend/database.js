@@ -81,24 +81,31 @@ export async function initializeDatabase() {
 
 // Creamos un objeto "espejo" para que server.js mantenga los mismos métodos .get, .all y .run 
 // ¡Así no tienes que cambiar nada de tus endpoints!
+// database.js (Reemplaza solo la función getDb)
 export function getDb() {
   return {
     // Para SELECT * de una sola fila
     get: async (text, params) => {
-      const res = await pool.query(text.replace(/\?/g, (_, i) => `$${i + 1}`), params);
+      // 1. Convertimos los '?' en '$1', '$2', etc.
+      const formattedText = text.replace(/\?/g, (_, i) => `$${i + 1}`);
+      // 2. Le pasamos el texto formateado Y los parámetros por separado de forma nativa a pg
+      const res = await pool.query(formattedText, params);
       return res.rows[0];
     },
+    
     // Para SELECT * de múltiples filas
     all: async (text, params) => {
-      const res = await pool.query(text.replace(/\?/g, (_, i) => `$${i + 1}`), params);
-      return res.rows;
-    },
-    // Para INSERTs, UPDATEs o DELETEs
-    run: async (text, params) => {
-      // Postgres usa $1, $2 en vez de ? para los parámetros seguro
       const formattedText = text.replace(/\?/g, (_, i) => `$${i + 1}`);
       const res = await pool.query(formattedText, params);
-      return { lastID: res.insertedId || null };
+      return res.rows;
+    },
+    
+    // Para INSERTs, UPDATEs o DELETEs
+    run: async (text, params) => {
+      const formattedText = text.replace(/\?/g, (_, i) => `$${i + 1}`);
+      const res = await pool.query(formattedText, params);
+      // Mantenemos la estructura para que server.js no rompa al buscar el ID
+      return { lastID: res.rows[0]?.id || null };
     }
   };
 }
