@@ -80,18 +80,20 @@ export async function initializeDatabase() {
 }
 
 
+// database.js
 export function getDb() {
   return {
     // Para SELECT * de una sola fila
     get: async (text, params) => {
-      // Si params viene vacío o undefined, nos aseguramos de que sea un array vacío
       const safeParams = params || [];
-      // Convertimos '?' a '$1::text', '$2::text' para obligar a Postgres a reconocer el tipo de dato
-      const formattedText = text.replace(/\?/g, (_, i) => `$${i + 1}::text`);
+      
+      // Convierte dinámicamente cada '?' en '$1', '$2', '$3' progresivamente de forma correcta
+      let index = 1;
+      const formattedText = text.replace(/\?/g, () => `$${index++}`);
+      
       const res = await pool.query(formattedText, safeParams);
       
-      // PARCHE PARA COUNT(*): Si la consulta es un COUNT, Postgres devuelve un string. 
-      // Lo convertimos a número para que 'userCount.count > 0' en server.js funcione perfecto.
+      // Parche para COUNT: Asegura que devuelva un número idéntico a SQLite
       if (res.rows[0] && res.rows[0].count !== undefined) {
         res.rows[0].count = Number(res.rows[0].count);
       }
@@ -102,7 +104,9 @@ export function getDb() {
     // Para SELECT * de múltiples filas
     all: async (text, params) => {
       const safeParams = params || [];
-      const formattedText = text.replace(/\?/g, (_, i) => `$${i + 1}::text`);
+      let index = 1;
+      const formattedText = text.replace(/\?/g, () => `$${index++}`);
+      
       const res = await pool.query(formattedText, safeParams);
       return res.rows;
     },
@@ -110,11 +114,19 @@ export function getDb() {
     // Para INSERTs, UPDATEs o DELETEs
     run: async (text, params) => {
       const safeParams = params || [];
-      // Agregamos RETURNING id a los INSERTS para simular el comportamiento de lastID de SQLite
-      let formattedText = text.replace(/\?/g, (_, i) => `$${i + 1}`);
+      let index = 1;
+      let formattedText = text.replace(/\?/g, () => `$${index++}`);
+      
+      // Si es un INSERT, le pedimos que nos devuelva el ID creado para simular lastID de SQLite
       if (formattedText.trim().toLowerCase().startsWith('insert')) {
-        formattedText += ' RETURNING id';
+        // Solo lo agrega si no tiene ya un RETURNING o un ON CONFLICT complejo al final
+        if (!formattedText.toLowerCase().includes('returning') && !formattedText.toLowerCase().includes('on conflict')) {
+          formattedText += ' RETURNING id';
+        } else if (formattedText.toLowerCase().includes('on conflict')) {
+          formattedText += ' RETURNING id';
+        }
       }
+      
       const res = await pool.query(formattedText, safeParams);
       return { lastID: res.rows[0]?.id || null };
     }
