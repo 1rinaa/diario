@@ -25,25 +25,19 @@ const handleSubmit = async (e) => {
         onLogin(data.token, data.user);
       }
     } catch (err) {
-      console.error("Error original capturado:", err); // Para que puedas ver el fallo real en la consola
-      
-      let mensajeFinal = 'Usuario o contraseña incorrectos';
+      try {
+        let mensajeFinal = 'Usuario o contraseña incorrectos';
 
-      // 1. Si el backend respondió con un error en formato JSON esperado
-      if (err.response?.data?.error && typeof err.response.data.error === 'string') {
-        mensajeFinal = err.response.data.error;
-      } 
-      // 2. Si Netlify devolvió un HTML (Error 404) en vez de conectar con la API
-      else if (typeof err.response?.data === 'string' && err.response.data.includes('<!DOCTYPE html>')) {
-        mensajeFinal = 'Error de conexión: El hosting estático interceptó la petición de la API.';
-      }
-      // 3. Si es un error de red o Axios no recibió respuesta (Backend apagado/CORS)
-      else if (err.message && typeof err.message === 'string') {
-        mensajeFinal = `Error de red: ${err.message}`;
-      }
+        if (typeof err?.response?.data?.error === 'string') {
+          mensajeFinal = err.response.data.error;
+        } else if (typeof err?.message === 'string') {
+          mensajeFinal = err.message;
+        }
 
-      // IMPORTANTE: Forzamos a que guarde texto plano para evitar el Illegal constructor
-      setError(String(mensajeFinal));
+        setError(String(mensajeFinal)); // forzar string puro siempre
+      } catch {
+        setError('Error inesperado al iniciar sesión');
+      }
     } finally {
       setLoading(false);
     }
