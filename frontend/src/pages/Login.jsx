@@ -24,7 +24,11 @@ function Login({ onLogin }) {
         onLogin(data.token, data.user);
       }
     } catch (err) {
-      setError(err.response?.data?.error || 'Error de conexión');
+      const mensajeError = typeof err.response?.data?.error === 'string'
+        ? err.response.data.error
+        : 'Usuario o contraseña incorrectos';
+        
+      setError(mensajeError);
     } finally {
       setLoading(false);
     }
