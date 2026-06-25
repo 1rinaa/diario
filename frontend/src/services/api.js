@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 // Usar variable de entorno o valor por defecto
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+const API_URL = import.meta.env.VITE_API_URL || 'https://diario-ky32.onrender.com/api';
 
 const api = axios.create({
   baseURL: API_URL,
@@ -157,7 +157,7 @@ export const pdfService = {
 
   // Obtener URL de un PDF (ruta pública para visualización)
   getUrl: (pdfId) => {
-    return `http://localhost:3001/api/pdfs/view/${pdfId}`; // Usa la ruta pública
+    return `https://diario-ky32.onrender.com/api/pdfs/view/${pdfId}`; // Usa la ruta pública
   },
 
   // Eliminar PDF

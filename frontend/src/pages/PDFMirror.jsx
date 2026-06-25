@@ -190,7 +190,7 @@ function PDFMirror() {
               {/* Visor del PDF - ALTURA AUMENTADA */}
               <div className={`${pdfExpanded ? 'w-full' : showNotes ? 'lg:w-3/5' : 'w-full'} bg-gray-100 rounded-xl p-4 overflow-auto`} style={{ minHeight: '650px', maxHeight: pdfExpanded ? 'calc(100vh - 200px)' : '700px' }}>
                 <embed 
-                  src={`http://localhost:3001/api/pdfs/view/${selectedPdf.id}`} 
+                  src={`https://diario-ky32.onrender.com/api/pdfs/view/${selectedPdf.id}`} 
                   type="application/pdf" 
                   width="100%" 
                   height="100%" 
