@@ -96,6 +96,7 @@ function Dashboard({ user }) {
           <div className="flex gap-2 flex-wrap">
             {['alegria', 'calma', 'tristeza', 'ansiedad', 'esperanza'].map(emo => {
               const cfg = getEmotionCfg(emo);
+              const EmotionIcon = cfg.Icon; // Referencia estática segura para React
               return (
                 <button
                   key={emo}
@@ -104,7 +105,7 @@ function Dashboard({ user }) {
                   style={{ background: cfg.bg, border: `1px solid ${cfg.border}`, color: '#7a4d8a' }}
                 >
                   <span style={{ color: cfg.border }}>
-                    <cfg.Icon size={16} />   
+                    <EmotionIcon size={16} />   
                   </span>
                   {emo}
                 </button>
@@ -181,6 +182,7 @@ function Dashboard({ user }) {
             <div className="space-y-2">
               {recentEmotions.map((emotion, idx) => {
                 const cfg = getEmotionCfg(emotion.primary_emotion);
+                const RecentIcon = cfg.Icon; // Referencia estática segura para React
                 return (
                   <div
                     key={idx}
@@ -190,7 +192,7 @@ function Dashboard({ user }) {
                   >
                     <div className="flex items-center gap-3">
                       <span style={{ color: cfg.border }}>
-                        <cfg.Icon size={20} />  
+                        <RecentIcon size={20} />  
                       </span>
                       <div>
                         <p className="text-sm font-medium capitalize" style={{ color: '#7a4d8a' }}>{emotion.primary_emotion}</p>

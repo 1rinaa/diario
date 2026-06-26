@@ -11,7 +11,7 @@ function Login({ onLogin }) {
   const [loading, setLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
-const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
@@ -34,7 +34,7 @@ const handleSubmit = async (e) => {
           mensajeFinal = err.message;
         }
 
-        setError(String(mensajeFinal)); // forzar string puro siempre
+        setError(String(mensajeFinal)); 
       } catch {
         setError('Error inesperado al iniciar sesión');
       }
@@ -60,7 +60,6 @@ const handleSubmit = async (e) => {
             backgroundRepeat: 'no-repeat',
           }}
         >
-          {/* Overlay con tono lila suave */}
           <div className="absolute inset-0" style={{
             background: 'linear-gradient(to top, rgba(161,109,192,0.45) 0%, rgba(255,255,255,0.05) 60%)'
           }} />
@@ -84,7 +83,6 @@ const handleSubmit = async (e) => {
         >
           <div className="max-w-sm mx-auto w-full">
 
-            {/* Detalle decorativo */}
             <div className="flex gap-1.5 mb-6">
               <span className="w-2 h-2 rounded-full" style={{ background: '#e8a0d4' }} />
               <span className="w-2 h-2 rounded-full" style={{ background: '#b8d4a8' }} />
@@ -160,7 +158,7 @@ const handleSubmit = async (e) => {
                 </div>
               </div>
 
-              {/* Recordarme / Olvidé contraseña */}
+              {/* Recordarme */}
               <div className="flex items-center justify-between">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
@@ -186,13 +184,6 @@ const handleSubmit = async (e) => {
                 <div className="text-xs text-center p-3 rounded-xl"
                   style={{ background: '#fce4f3', color: '#a0457a' }}>
                   {error}
-                </div>
-              )}
-
-              {error && (
-                <div className="text-xs text-center p-3 rounded-xl"
-                  style={{ background: '#fce4f3', color: '#a0457a' }}>
-                  {typeof error === 'string' ? error : 'Error inesperado'}
                 </div>
               )}
 
