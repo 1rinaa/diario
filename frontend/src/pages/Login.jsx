@@ -189,6 +189,13 @@ const handleSubmit = async (e) => {
                 </div>
               )}
 
+              {error && (
+                <div className="text-xs text-center p-3 rounded-xl"
+                  style={{ background: '#fce4f3', color: '#a0457a' }}>
+                  {typeof error === 'string' ? error : 'Error inesperado'}
+                </div>
+              )}
+
               {/* Botón */}
               <button
                 type="submit"
