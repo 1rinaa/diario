@@ -38,13 +38,13 @@ function Dashboard({ user }) {
   };
 
   const emotionConfig = {
-    alegria:   { icon: <Smile size={16} />,  bg: '#fef9c3', border: '#fde68a' },
-    calma:     { icon: <Sun size={16} />,    bg: '#e4f4ec', border: '#a8d4b8' },
-    tristeza:  { icon: <Frown size={16} />,  bg: '#e8f0fe', border: '#93c5fd' },
-    ansiedad:  { icon: <Zap size={16} />,    bg: '#ede8f8', border: '#c4b0e8' },
-    ira:       { icon: <Flame size={16} />,  bg: '#fce4f3', border: '#e8a0d4' },
-    neutral:   { icon: <Meh size={16} />,    bg: '#f3f4f6', border: '#d1d5db' },
-    esperanza: { icon: <Star size={16} />,   bg: '#fef3c7', border: '#fcd34d' },
+    alegria:   { Icon: Smile,  bg: '#fef9c3', border: '#fde68a' },
+    calma:     { Icon: Sun,    bg: '#e4f4ec', border: '#a8d4b8' },
+    tristeza:  { Icon: Frown,  bg: '#e8f0fe', border: '#93c5fd' },
+    ansiedad:  { Icon: Zap,    bg: '#ede8f8', border: '#c4b0e8' },
+    ira:       { Icon: Flame,  bg: '#fce4f3', border: '#e8a0d4' },
+    neutral:   { Icon: Meh,    bg: '#f3f4f6', border: '#d1d5db' },
+    esperanza: { Icon: Star,   bg: '#fef3c7', border: '#fcd34d' },
   };
 
   const getEmotionCfg = (e) => emotionConfig[e] || emotionConfig.neutral;
@@ -103,7 +103,9 @@ function Dashboard({ user }) {
                   className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 capitalize hover:scale-105"
                   style={{ background: cfg.bg, border: `1px solid ${cfg.border}`, color: '#7a4d8a' }}
                 >
-                  <span style={{ color: cfg.border }}>{cfg.icon}</span>
+                  <span style={{ color: cfg.border }}>
+                    <cfg.Icon size={16} />   
+                  </span>
                   {emo}
                 </button>
               );
@@ -187,7 +189,9 @@ function Dashboard({ user }) {
                     onClick={() => window.location.href = '/emotional'}
                   >
                     <div className="flex items-center gap-3">
-                      <span style={{ color: cfg.border }}>{React.cloneElement(cfg.icon, { size: 20 })}</span>
+                      <span style={{ color: cfg.border }}>
+                        <cfg.Icon size={20} />  
+                      </span>
                       <div>
                         <p className="text-sm font-medium capitalize" style={{ color: '#7a4d8a' }}>{emotion.primary_emotion}</p>
                         <p className="text-xs" style={{ color: '#a89ab8' }}>{emotion.date}</p>
