@@ -6,7 +6,6 @@ import EmotionalDiary from './pages/EmotionalDiary';
 import DailyJournal from './pages/DailyJournal';
 import PDFMirror from './pages/PDFMirror';
 import { authService } from './services/api';
-import { Home, BookHeart, FileText, LogOut, User, BookOpen } from 'lucide-react';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
