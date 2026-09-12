@@ -6,6 +6,7 @@ import EmotionalDiary from './pages/EmotionalDiary';
 import DailyJournal from './pages/DailyJournal';
 import PDFMirror from './pages/PDFMirror';
 import { authService } from './services/api';
+import Navigation from './components/Navigation';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
